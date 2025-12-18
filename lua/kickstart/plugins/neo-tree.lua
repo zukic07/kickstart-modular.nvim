@@ -12,14 +12,20 @@ return {
   lazy = false,
   keys = {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '<leader>e', '<Cmd>Neotree toggle<CR>', desc = 'NeoTree toggle' },
   },
   opts = {
-    filesystem = {
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
-      },
-    },
+    filesystem = { window = { mappings = {
+      ['\\'] = 'close_window',
+      ['<space>'] = 'none',
+    } } },
+    git_status = { window = { mappings = {
+      ['\\'] = 'close_window',
+      ['<space>'] = 'none',
+    } } },
+    buffers = { window = { mappings = {
+      ['\\'] = 'close_window',
+      ['<space>'] = 'none',
+    } } },
   },
 }
