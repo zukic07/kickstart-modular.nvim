@@ -23,32 +23,34 @@ return {
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
     {
-      '<F5>',
+      '<F1>',
       function()
         require('dap').continue()
       end,
       desc = 'Debug: Start/Continue',
     },
     {
-      '<F1>',
+      '<F6>',
       function()
         require('dap').step_into()
       end,
       desc = 'Debug: Step Into',
     },
     {
-      '<F2>',
+      '<F5>',
       function()
         require('dap').step_over()
       end,
       desc = 'Debug: Step Over',
     },
     {
-      '<F3>',
+      '<F7>',
       function()
         require('dap').step_out()
       end,
@@ -70,7 +72,7 @@ return {
     },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
-      '<F7>',
+      '<F8>',
       function()
         require('dapui').toggle()
       end,
@@ -124,7 +126,7 @@ return {
     -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
     -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
     -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
     --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
     -- for type, icon in pairs(breakpoint_icons) do
     --   local tp = 'Dap' .. type
@@ -142,6 +144,29 @@ return {
         -- On Windows delve must be run attached or it crashes.
         -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
         detached = vim.fn.has 'win32' == 0,
+      },
+    }
+
+    -- Java debug configuration for Gradle --debug-jvm
+    -- Note: JDTLS must be configured with java-debug bundles in ftplugin/java.lua
+    dap.configurations.java = {
+      {
+        type = 'java',
+        request = 'attach',
+        name = 'Attach to Gradle (port 5005)',
+        hostName = '127.0.0.1',
+        port = 5005,
+      },
+      {
+        type = 'java',
+        request = 'attach',
+        name = 'Attach to Remote Java Process',
+        hostName = function()
+          return vim.fn.input('Host: ', '127.0.0.1')
+        end,
+        port = function()
+          return tonumber(vim.fn.input('Port: ', '5005'))
+        end,
       },
     }
   end,
