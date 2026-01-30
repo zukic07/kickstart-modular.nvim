@@ -5,7 +5,8 @@ local workspace_dir = '/home/ahz/nvim-workspaces-root/' .. project_name
 --                                               ^^
 --                                               string concattenation in Lua
 local bundles = {
-  vim.fn.glob('/home/ahz/github/global/java-debug/com.microsoft.java.debug.plugin-*.jar', true),
+  -- Path to java-debug-adapter jar file
+  vim.fn.glob('/home/ahz/.local/share/nvim/mason/packages/java-debug-adapter/extension/server/*.jar', true),
 }
 -- See `:help vim.lsp.start` for an overview of the supported `config` options.
 local config = {
@@ -27,7 +28,11 @@ local config = {
   -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
   -- for a list of options
   settings = {
-    java = {},
+    java = {
+      format = {
+        enabled = false, -- Hier den Formatter komplett abschalten
+      },
+    },
   },
 
   -- This sets the `initializationOptions` sent to the language server
@@ -43,3 +48,64 @@ local config = {
 }
 require('jdtls').start_or_attach(config)
 
+-- Custom configs
+-- start jdtls explicitly in a folder
+vim.api.nvim_create_user_command('JdtlsTemp', function(opts)
+  local root = opts.args ~= '' and opts.args or vim.fn.getcwd()
+  local workspace = vim.fn.stdpath 'cache' .. '/jdtls-temp'
+
+  require('jdtls').start_or_attach {
+    cmd = {
+      'jdtls',
+      '-data',
+      workspace,
+    },
+    root_dir = root,
+  }
+
+  print('jdtls TEMP gestartet für: ' .. root)
+end, {
+  nargs = '?',
+  complete = 'dir',
+})
+
+-- Add new Command
+
+-- Organize all imports
+local function organize_imports_all_java()
+  local java_files = vim.fn.glob('**/*.java', true, true)
+
+  for _, file in ipairs(java_files) do
+    -- Buffer anlegen ohne ihn anzuzeigen
+    local bufnr = vim.fn.bufadd(file)
+
+    -- Swapfile deaktivieren
+    vim.bo[bufnr].swapfile = false
+
+    -- Buffer laden
+    vim.fn.bufload(bufnr)
+
+    -- Warten bis LSP attached ist
+    vim.wait(1000, function()
+      return next(vim.lsp.get_active_clients { bufnr = bufnr }) ~= nil
+    end)
+
+    -- Organize Imports
+    vim.lsp.buf.execute_command {
+      command = 'java.edit.organizeImports',
+      arguments = { vim.uri_from_bufnr(bufnr) },
+    }
+
+    -- speichern
+    vim.api.nvim_buf_call(bufnr, function()
+      vim.cmd 'silent write'
+    end)
+
+    -- optional: Buffer wieder entladen
+    vim.cmd('silent bwipeout ' .. bufnr)
+  end
+
+  print '✔ Organize imports abgeschlossen (swap-sicher)'
+end
+
+vim.api.nvim_create_user_command('JavaOrganizeImportsAll', organize_imports_all_java, {})

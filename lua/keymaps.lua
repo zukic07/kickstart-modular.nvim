@@ -51,4 +51,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Search live_grep only in a specific subfolder
+vim.keymap.set('n', '<leader>gS', function()
+  Vrequire('telescope.builtin').live_grep {
+    search_dirs = { vim.fn.input('Search in dir: ', '', 'dir') },
+  }
+end)
+
 -- vim: ts=2 sts=2 sw=2 et

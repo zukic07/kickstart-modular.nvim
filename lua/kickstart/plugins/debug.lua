@@ -146,28 +146,5 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
-
-    -- Java debug configuration for Gradle --debug-jvm
-    -- Note: JDTLS must be configured with java-debug bundles in ftplugin/java.lua
-    dap.configurations.java = {
-      {
-        type = 'java',
-        request = 'attach',
-        name = 'Attach to Gradle (port 5005)',
-        hostName = '127.0.0.1',
-        port = 5005,
-      },
-      {
-        type = 'java',
-        request = 'attach',
-        name = 'Attach to Remote Java Process',
-        hostName = function()
-          return vim.fn.input('Host: ', '127.0.0.1')
-        end,
-        port = function()
-          return tonumber(vim.fn.input('Port: ', '5005'))
-        end,
-      },
-    }
   end,
 }
