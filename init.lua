@@ -114,3 +114,6 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
+-- Markdown settings
+vim.opt.conceallevel = 2
+vim.opt.concealcursor = 'nc' -- 'nc' = conceal in normal und visual mode, aber nicht im insert mode (zum editieren)

@@ -42,6 +42,7 @@ require('lazy').setup({
   require 'kickstart.plugins.mini',
 
   require 'kickstart.plugins.treesitter',
+  require 'kickstart.plugins.diffview',
 
   require 'kickstart.plugins.java',
 

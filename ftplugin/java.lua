@@ -32,6 +32,19 @@ local config = {
       format = {
         enabled = false, -- Hier den Formatter komplett abschalten
       },
+      configuration = {
+        runtimes = {
+          {
+            name = 'JavaSE-17',
+            path = '/home/ahz/installs/java-jdk/jdk-17.0.18.1/', -- Pfad zu Java 17
+          },
+          {
+            name = 'JavaSE-21',
+            path = '/home/ahz/installs/java-jdk/jdk-21.0.9+10/',
+            default = true, -- Projekt verwendet Java 21
+          },
+        },
+      },
     },
   },
 
