@@ -36,13 +36,6 @@ return {
       desc = 'Debug: Start/Continue',
     },
     {
-      '<F6>',
-      function()
-        require('dap').step_into()
-      end,
-      desc = 'Debug: Step Into',
-    },
-    {
       '<F5>',
       function()
         require('dap').step_over()
@@ -50,11 +43,32 @@ return {
       desc = 'Debug: Step Over',
     },
     {
+      '<F6>',
+      function()
+        require('dap').step_into()
+      end,
+      desc = 'Debug: Step Into',
+    },
+    {
       '<F7>',
       function()
         require('dap').step_out()
       end,
       desc = 'Debug: Step Out',
+    },
+    {
+      '<F8>',
+      function()
+        require('dapui').toggle()
+      end,
+      desc = 'Debug: See last session result.',
+    },
+    {
+      '<F9>',
+      function()
+        require('dap').terminate()
+      end,
+      desc = 'Debug: Terminate',
     },
     {
       '<leader>b',
@@ -69,14 +83,6 @@ return {
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
       desc = 'Debug: Set Breakpoint',
-    },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    {
-      '<F8>',
-      function()
-        require('dapui').toggle()
-      end,
-      desc = 'Debug: See last session result.',
     },
   },
   config = function()
@@ -97,6 +103,7 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'codelldb', -- C/C++ debugger
       },
     }
 
@@ -137,6 +144,34 @@ return {
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+    -- Install C/C++ debug config
+    local mason_path = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb'
+    if vim.fn.executable(mason_path) == 1 then
+      dap.adapters.codelldb = {
+        type = 'server',
+        port = '${port}',
+        executable = {
+          command = mason_path,
+          args = { '--port', '${port}' },
+        },
+      }
+    else
+      vim.notify('codelldb not found at ' .. mason_path .. '. Run :MasonInstall codelldb', vim.log.levels.WARN)
+    end
+    dap.configurations.c = {
+      {
+        name = 'Launch file',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+      },
+    }
+    dap.configurations.cpp = dap.configurations.c
 
     -- Install golang specific config
     require('dap-go').setup {
