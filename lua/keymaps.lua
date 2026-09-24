@@ -60,3 +60,52 @@ vim.keymap.set('n', '<leader>gS', function()
 end)
 
 -- vim: ts=2 sts=2 sw=2 et
+
+-- this method allows to execute a cli command and opens
+-- a floating window showing the executions log
+local function float_cmd(cmd)
+  -- Buffer erstellen (Terminal-Buffer)
+  local buf = vim.api.nvim_create_buf(false, true)
+
+  -- Floating Window
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = math.floor(vim.o.columns * 0.85),
+    height = math.floor(vim.o.lines * 0.7),
+    row = math.floor(vim.o.lines * 0.15),
+    col = math.floor(vim.o.columns * 0.075),
+    style = 'minimal',
+    border = 'rounded',
+  })
+
+  vim.fn.termopen(cmd)
+
+  -- 🔥 echter Terminal-Modus im Buffer
+  -- vim.fn.termopen(vim.o.shell, {
+  --   on_exit = function(_, code)
+  --     vim.api.nvim_buf_set_lines(buf, -1, -1, false, {
+  --       '',
+  --       'Process exited with code: ' .. code,
+  --     })
+  --   end,
+  -- })
+
+  -- Optional: direkt in Insert Mode (wie echtes Terminal)
+  -- vim.cmd("startinsert")
+end
+
+local function split_cmd(cmd)
+  local args = { 'bash', '-ic' }
+  for word in cmd:gmatch '%S+' do
+    table.insert(args, word)
+  end
+  return args
+end
+
+vim.keymap.set('n', '<leader>lB', function()
+  float_cmd(split_cmd './gradlew build -x test')
+end, { desc = 'Gradlew build without test' })
+
+vim.keymap.set('n', '<leader>lS', function()
+  float_cmd(split_cmd 'sync-code')
+end, { desc = 'Sync class files with Integration Server' })
