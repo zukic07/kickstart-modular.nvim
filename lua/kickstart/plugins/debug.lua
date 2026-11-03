@@ -36,6 +36,18 @@ return {
       desc = 'Debug: Start/Continue',
     },
     {
+      '<F2>',
+      function()
+        local dap = require 'dap'
+        if dap.last_run_config then
+          dap.run(dap.last_run_config)
+        else
+          vim.notify('no last run, use F1 first', vim.log.levels.WARN)
+        end
+      end,
+      desc = 'Debug: Run Last Session',
+    },
+    {
       '<F5>',
       function()
         require('dap').step_over()
@@ -76,6 +88,14 @@ return {
         require('dap').toggle_breakpoint()
       end,
       desc = 'Debug: Toggle Breakpoint',
+    },
+    {
+      '<leader>lr',
+      function()
+        require('dapui').close()
+        require('dapui').open { reset = true }
+      end,
+      desc = 'Debug: Reset DAP UI Layout',
     },
     {
       '<leader>B',
@@ -159,16 +179,35 @@ return {
     else
       vim.notify('codelldb not found at ' .. mason_path .. '. Run :MasonInstall codelldb', vim.log.levels.WARN)
     end
+    local last_c_program = nil
+    local last_c_args = ''
+
+    local function launch_c()
+      local default_prog = last_c_program or (vim.fn.getcwd() .. '/')
+      last_c_program = vim.fn.input('Path to executable: ', default_prog, 'file')
+      local args_str = vim.fn.input('Arguments: ', last_c_args)
+      last_c_args = args_str
+      local parsed_args = vim.split(args_str, ' +', { trimempty = true })
+      dap.run {
+        name = 'Launch file',
+        type = 'codelldb',
+        request = 'launch',
+        program = last_c_program,
+        args = parsed_args,
+        cwd = vim.fn.getcwd(),
+        stopOnEntry = false,
+      }
+    end
+
     dap.configurations.c = {
       {
         name = 'Launch file',
         type = 'codelldb',
         request = 'launch',
         program = function()
-          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          launch_c()
+          return dap.ABORT
         end,
-        cwd = '${workspaceFolder}',
-        stopOnEntry = false,
       },
     }
     dap.configurations.cpp = dap.configurations.c

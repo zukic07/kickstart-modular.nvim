@@ -109,3 +109,8 @@ end, { desc = 'Gradlew build without test' })
 vim.keymap.set('n', '<leader>lS', function()
   float_cmd(split_cmd 'sync-code')
 end, { desc = 'Sync class files with Integration Server' })
+
+vim.keymap.set('n', '<leader>lP', function()
+  require('dap').clear_breakpoints()
+  vim.notify('All breakpoints cleared', vim.log.levels.INFO)
+end, { desc = 'Debug: Clear all [P]oints/Breakpoints' })

@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 require 'options'
@@ -117,3 +117,13 @@ vim.opt.expandtab = true
 -- Markdown settings
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc' -- 'nc' = conceal in normal und visual mode, aber nicht im insert mode (zum editieren)
+
+vim.filetype.add {
+  extension = {
+    jcl = 'jcl',
+    bsp = 'ibmAsm',
+    asm = 'ibmAsm',
+    hlasm = 'ibmAsm',
+    mac = 'ibmAsm',
+  },
+}

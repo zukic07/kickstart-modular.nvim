@@ -1,0 +1,600 @@
+                                                                                                                                    
+                                         High Level Assembler Option Summary                   (PTF UO03644)   Page    1            
+                                                                                            HLASM R6.0  2026/10/19 11.13            
+  No Overriding ASMAOPT Parameters                                                                                                  
+  No Overriding Parameters                                                                                                          
+  No Process Statements                                                                                                             
+                                                                                                                                    
+                                                                                                                                    
+  Options for this Assembly                                                                                                         
+                    NOADATA                                                                                                         
+                      ALIGN                                                                                                         
+                    NOASA                                                                                                           
+                      ASCII(00819)                                                                                                  
+                      BATCH                                                                                                         
+                      CA(LOCAL)                                                                                                     
+                      CE(LOCAL)                                                                                                     
+                      CODEPAGE(01148)                                                                                               
+                    NOCOMPAT                                                                                                        
+                      CU(LOCAL)                                                                                                     
+                    NODATAMAP                                                                                                       
+                    NODBCS                                                                                                          
+                    NODECK                                                                                                          
+                      DXREF                                                                                                         
+                      EBCDIC(00037)                                                                                                 
+                      ESD                                                                                                           
+                    NOEXIT                                                                                                          
+                      FAIL(NOMSG,NOMNOTE,MAXERRS(500))                                                                              
+                      FLAG(0,ALIGN,CONT,EXLITW,NOIMPLEN,NOLONGER,NOPAGE0,PUSH,RECORD,RENT,NOSIGNED,NOSUBSTR,NOTRUNC,                
+                           USING0)                                                                                                  
+                    NOFOLD                                                                                                          
+                    NOGOFF                                                                                                          
+                      ILMA                                                                                                          
+                    NOINFO                                                                                                          
+                      LANGUAGE(EN)                                                                                                  
+                    NOLIBMAC                                                                                                        
+                      LINECOUNT(60)                                                                                                 
+                      LIST(121)                                                                                                     
+                      MACHINE(,NOLIST)                                                                                              
+                      MXREF(SOURCE)                                                                                                 
+                      OBJECT                                                                                                        
+                      OPTABLE(UNI,NOLIST)                                                                                           
+                    NOPCONTROL                                                                                                      
+                    NOPESTOP                                                                                                        
+                    NOPROFILE                                                                                                       
+                    NORA2                                                                                                           
+                    NORENT                                                                                                          
+                      RLD                                                                                                           
+                      RXREF                                                                                                         
+                      SECTALGN(8)                                                                                                   
+                      SIZE(MAX)                                                                                                     
+                    NOSUPRWARN                                                                                                      
+                      SYSPARM()                                                                                                     
+                    NOTERM                                                                                                          
+                    NOTEST                                                                                                          
+                      THREAD                                                                                                        
+                    NOTRANSLATE                                                                                                     
+                      TYPECHECK(MAGNITUDE,REGISTER,SIGNED)                                                                          
+                                                                                                                                    
+                                         High Level Assembler Option Summary                   (PTF UO03644)   Page    2            
+                                                                                            HLASM R6.0  2026/10/19 11.13            
+                      UNICODE(01200)                                                                                                
+                      USING(NOLIMIT,MAP,WARN(15))                                                                                   
+                    NOWORKFILE                                                                                                      
+                      XREF(SHORT,UNREFS)                                                                                            
+                                                                                                                                    
+  No Overriding DD Names                                                                                                            
+                                                                                                                                    
+                                              External Symbol Dictionary                                       Page    3            
+Symbol   Type   Id     Address  Length   Owner Id Flags Alias-of                            HLASM R6.0  2026/10/19 11.13            
+DEMO1     SD 00000001 00000000 00000077             00                                                                              
+                                                                                                                                    
+                                                                                                               Page    4            
+  Active Usings: None                                                                                                               
+  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2026/10/19 11.13            
+000000                00000 00077     1 DEMO1     CSECT                                                                             
+000000 C0C0 0000 0000       00000     2           LARL  12,DEMO1        Load base register                                          
+                 R:C  00000           3           USING DEMO1,12        Use R12 as base                                             
+000006 4830 C040            00040     4           LH    3,Int1          Load Int1 into R3                                           
+00000A 4140 C040            00040     5           LA    4,Int1                                                                      
+00000E 4150 4010            00010     6           LA    5,16(0,4)                                                                   
+000012 4160 4010            00010     7           LA    6,16(0,4)                                                                   
+                                      8 *                                                                                           
+                                      9 * CVT-Identifikationsdaten holen und per WTO ausgeben                                       
+                                     10 *                                                                                           
+000016 188E                          11           LR    8,14            R14 sichern, WTO ueberschreibt R14                          
+000018 5870 0010            00010    12           L     7,CVTPTR(0,0)   R7 = Adresse der CVT (PSA + X'10')                          
+00001C A77A FF00                     13           AHI   7,-256          R7 = Beginn des CVT-Prefix (CVTFIX)                         
+                 R:7  00000          14           USING CVTFIX,7        Prefix und CVT ansprechbar                                  
+000020 D207 C050 70D8 00050 000D8    15           MVC   WTOL+PRODOFF(8),CVTPRODN    Produktname, z.B. SP7.3.1                       
+000026 D207 C05E 70E0 0005E 000E0    16           MVC   WTOL+FMIDOFF(8),CVTPRODI    FMID, z.B. HBB77E0                              
+00002C D207 C06F 7254 0006F 00254    17           MVC   WTOL+SYSOFF(8),CVTSNAME     Systemname                                      
+                                     18           WTO   MF=(E,WTOL)     Meldung auf die Konsole                                     
+000032 4110 C044            00044    22+         LA    1,WTOL                            LOAD PARAMETER REG 1   02-IHBIN            
+000036 0A23                          23+         SVC   35                       ISSUE SVC 35               @L6A 01-WTO              
+                                     24           DROP  7                                                                           
+000038 18E8                          25           LR    14,8            R14 wiederherstellen                                        
+                                     26 *                                                                                           
+00003A 0000                          27           DC    H'0'            Invalid Opcode                                              
+00003C 18F0                          28           LR    15,0            Set return code                                             
+00003E 07FE                          29           BR    14              End program                                                 
+000040 000A                          30 Int1      DC    H'10'                                                                       
+                                     31 *                                                                                           
+                                     32 * WTO-Parameterliste; Text beginnt bei WTOL+4                                               
+                                     33 *                                                                                           
+                                     34 WTOL      WTO   'PRODUCT=........ FMID=........ SYSNAME=........',     X                    
+                                                       MF=L                                                                         
+000044                               36+WTOL     DS    0F                                                       01-WTO              
+000044 0033                          37+         DC    AL2(51)                  TEXT LENGTH            @YA17152 01-WTO              
+000046 0000                          38+         DC    B'0000000000000000'      MCSFLAGS                        01-WTO              
+000048 D7D9D6C4E4C3E37E              39+         DC    C'PRODUCT=........ FMID=........ SYSNAME=........'      X01-WTO              
+000050 4B4B4B4B4B4B4B4B                +                                        MESSAGE TEXT               @L6C                     
+                      0000C          40 PRODOFF   EQU   4+8             Offset hinter 'PRODUCT='                                    
+                      0001A          41 FMIDOFF   EQU   4+8+8+6         Offset hinter ' FMID='                                      
+                      0002B          42 SYSOFF    EQU   4+8+8+6+8+9     Offset hinter ' SYSNAME='                                   
+                                     43 *                                                                                           
+                                     44           CVT   DSECT=YES,PREFIX=YES,LIST=NO   CVT incl. Prefix                             
+                                     45+*%CVTL1 : ;                                                                                 
+                                     46+*                                                                                           
+                                     47+*/* START OF SPECIFICATIONS ******************************************/                     
+                                     48+*/*01* PROPRIETARY_STATEMENT******************************************/                     
+                                     49+*/*                                                                  */                     
+                                     50+*/*                                                                  */                     
+                                     51+*/*                                                                  */                     
+                                     52+*/* LICENSED MATERIALS - PROPERTY OF IBM                             */                     
+                                     53+*/* 5655-ZOS COPYRIGHT IBM CORP. 1988, 2023                          */                     
+                                     54+*/*                                                                  */                     
+                                     55+*/* STATUS= HBB77E0                                                  */                     
+                                     56+*/*                                                                  */                     i                                     57+*/***END_OF_PROPRIETARY_STATEMENT*************************************/                     
+                                                                                                               Page    5            
+  Active Usings: DEMO1,R12                                                                                                          
+  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2026/10/19 11.13            
+                                     58+*/*                                                                  */                     
+                                     59+*/*01* EXTERNAL CLASSIFICATION:                                      */                     
+                                     60+*/*02*         DMTI:BASE                                             */                     
+                                     61+*/*02*         GUPI: FIELDS                                          */                     
+                                     62+*/*                  CVTABEND                                        */                     
+                                     63+*/*                  CVTBRET                                         */                     
+                                     64+*/*                  CVTBSM0F                                    @NJA*/                     
+                                     65+*/*                  CVTCSD                                          */                     
+                                     66+*/*                  CVTCTLFG                                        */                     
+                                     67+*/*                  CVTDCB                                          */                     
+                                     68+*/*                  CVTDCPA                                         */                     
+                                     69+*/*                  CVTDFA                                          */                     
+                                     70+*/*                  CVTECVT                                         */                     
+                                     71+*/*                  CVTEDAT2                                        */                     
+                                     72+*/*                  CVTEPLPS                                        */                     
+                                     73+*/*                  CVTEXIT                                         */                     
+                                     74+*/*                  CVTEXP1                                         */                     
+                                     75+*/*                  CVTFLAG2                                        */                     
+                                     76+*/*                  CVTFLAG3                                        */                     
+                                     77+*/*                  CVTFLAG4                                        */                     
+                                     78+*/*                  CVTFLAG5                                    @NUA*/                     
+                                     79+*/*                  CVTFLAG6                                    @0NA*/                     
+                                     80+*/*                  CVTFLAG7                                    @O4A*/                     
+                                     81+*/*                  CVTFLAG9                                    @0RA*/                     
+                                     82+*/*                  CVTFLGBT                                        */                     
+                                     83+*/*                  CVTIXAVL                                        */                     
+                                     84+*/*                  CVTJESCT                                        */                     
+                                     85+*/*                  CVTLCCAT                                    @NGA*/                     
+                                     86+*/*                  CVTLDTO                                         */                     
+                                     87+*/*                  CVTLSO                                          */                     
+                                     88+*/*                  CVTMAXMP                                        */                     
+                                     89+*/*                  CVTMDL                                          */                     
+                                     90+*/*                  CVTMSER                                         */                     
+                                     91+*/*                  CVTOPCTP                                        */                     
+                                     92+*/*                  CVTOSLVL                                        */                     
+                                     93+*/*                  CVTOVER                                         */                     
+                                     94+*/*                  CVTPCCAT                                        */                     
+                                     95+*/*                  CVTPCNVT                                        */                     
+                                     96+*/*                  CVTPRLTV                                        */                     
+                                     97+*/*                  CVTPROD                                         */                     
+                                     98+*/*                  CVTPSXM                                         */                     
+                                     99+*/*                  CVTPVTP                                     @O5A*/                     
+                                    100+*/*                  CVTQTD00                                        */                     
+                                    101+*/*                  CVTQTE00                                        */                     
+                                    102+*/*                  CVTRAC                                          */                     
+                                    103+*/*                  CVTRCZRT                                        */                     
+                                    104+*/*                  CVTRELNO                                        */                     
+                                    105+*/*                  CVTRI                                       @NNA*/                     
+                                    106+*/*                  CVTRTMCT                                    @N1A*/                     
+                                    107+*/*                  CVTSCPIN                                        */                     
+                                    108+*/*                  CVTSDBF                                         */                     
+                                    109+*/*                  CVTSMCA                                         */                     
+                                    110+*/*                  CVTSNAME                                        */                     
+                                    111+*/*                  CVTSUBSP                                        */                     i                                    112+*/*                  CVTSVT                                          */                     
+                                                                                                               Page    6            
+  Active Usings: DEMO1,R12                                                                                                          
+  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2026/10/19 11.13            
+                                    113+*/*                  CVTSYSAD                                        */                     
+                                    114+*/*                  CVTTPC                                          */                     
+                                    115+*/*                  CVTTVT                                          */                     
+                                    116+*/*                  CVTTX                                       @NMA*/                     
+                                    117+*/*                  CVTTXC                                      @NMA*/                     
+                                    118+*/*                  CVTTXTE                                     @NMA*/                     
+                                    119+*/*                  CVTTZ                                       @Q6A*/                     
+                                    120+*/*                  CVTUCBSC                                        */                     
+                                    121+*/*                  CVTUNDAltVM                                 @0TA*/                     
+                                    122+*/*                  CVTUNDVM                                        */                     
+                                    123+*/*                  CVTUNDzVM                                   @0TA*/                     
+                                    124+*/*                  CVTUSER                                         */                     
+                                    125+*/*                  CVTVFGET                                        */                     
+                                    126+*/*                  CVTVFIND                                        */                     
+                                    127+*/*                  CVTVMEnv                                    @0TA*/                     
+                                    128+*/*                  CVTVPSIB                                        */                     
+                                    129+*/*                  CVTVWAIT                                        */                     
+                                    130+*/*                  CVTZPDT                                     @O7A*/                     
+                                    131+*/*                  CVT0EF00                                        */                     
+                                    132+*/*                  CVT0PT0E                                        */                     
+                                    133+*/*                  CVT0PT02                                        */                     
+                                    134+*/*                  CVT0PT03                                        */                     
+                                    135+*/*                  CVT0SCR1                                        */                     
+                                    136+*/*02*         PSPI:FIELDS                                           */                     
+                                    137+*/*                  CVTAMFF                                         */                     
+                                    138+*/*                  CVTASMVT                                        */                     
+                                    139+*/*                  CVTASVT                                         */                     
+                                    140+*/*                  CVTGDA                                          */                     
+                                    141+*/*                  CVTGRSST                                        */                     
+                                    142+*/*                  CVTGVT                                          */                     
+                                    143+*/*                  CVTHID                                          */                     
+                                    144+*/*                  CVTLINK                                     @M9A*/                     
+                                    145+*/*                  CVTRCEP                                         */                     
+                                    146+*/*                  CVTSAF                                          */                     
+                                    147+*/*                  CVTSDUMP                                        */                     
+                                    148+*/*                  CVTVERID                                        */                     
+                                    149+*/*01* END OF EXTERNAL CLASSIFICATION:                               */                     
+                                    150+*/*                                                                  */                     
+                                    151+*/*01* DESCRIPTIVE NAME:  Communications Vector Table                */                     
+                                    152+*/*02*  ACRONYM:  CVT                                                */                     
+                                    153+*/*                                                                  */                     
+                                    154+*/*01* MACRO-NAME:  CVT                                              */                     
+                                    155+*/*                                                                  */                     
+                                    156+*/*01* DSECT NAME:                                                   */                     
+                                    157+*/*02*  CVT(when DSECT=YES is coded and PREFIX=YES is not coded)     */                     
+                                    158+*/*02*  CVTFIX(when DSECT=YES and PREFIX=YES is coded)               */                     
+                                    159+*/*02*  CVTMAP(or name user coded in label field of CVT invocation)  */                     
+                                    160+*/*02*  CVTVSTGX(DSECT name of virtual storage extension)            */                     
+                                    161+*/*02*  CVTXTNT1(DSECT name of OS-OS/VS common extension)            */                     
+                                    162+*/*02*  CVTXTNT2(DSECT name of OS/VS1-OS/VS2 common extension)       */                     
+                                    163+*/*                                                                  */                     
+                                    164+*/*                                                                  */                     
+                                    165+*/*01* COMPONENT:  Common Macros (SC101)                             */                     
+                                    166+*/*                                                                  */                     i                                    167+*/*01* EYE-CATCHER:  CVT                                             */                     
+                                                                                                               Page    7            
+  Active Usings: DEMO1,R12                                                                                                          
+  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2026/10/19 11.13            
+                                    168+*/*02*  OFFSET:  96                                                  */                     
+                                    169+*/*02*  LENGTH:  4                                                   */                     
+                                    170+*/*                                                                  */                     
+                                    171+*/*01* STORAGE ATTRIBUTES:                                           */                     
+                                    172+*/*                                                                  */                     
+                                    173+*/*02*   ALLOCATION METHOD:  N/A.                                    */                     
+                                    174+*/*02*   SUBPOOL:            Nucleus                                 */                     
+                                    175+*/*02*   KEY:                0                                       */                     
+                                    176+*/*02*   RESIDENCY:          Below 16M line                          */                     
+                                    177+*/*02*   FREQUENCY:          1 per system.                           */                     
+                                    178+*/*                                                                  */                     
+                                    179+*/*01* SIZE:                                                         */                     
+                                    180+*/*     Prefix: 256 bytes                                            */                     
+                                    181+*/*     CVT: 1280 bytes                                              */                     
+                                    182+*/*     Virtual storage address extension: 80 bytes                  */                     
+                                    183+*/*     OS - OS/VS common extension: 12 bytes                        */                     
+                                    184+*/*     OS/VS1 - OS/VS2 common extension: 132 bytes                  */                     
+                                    185+*/*                                                                  */                     
+                                    186+*/*01* CREATED BY:                                                   */                     
+                                    187+*/*     IEAVCVT                                                      */                     
+                                    188+*/*                                                                  */                     
+                                    189+*/*01* DELETED BY: N/A.                                              */                     
+                                    190+*/*                                                                  */                     
+                                    191+*/*01* POINTED TO BY:                                                */                     
+                                    192+*/*     FLCCVT field of the PSA data area (location X'10')           */                     
+                                    193+*/*     FLCCVT2 field of the PSA data area                           */                     
+                                    194+*/*     CVTSMEXT points to the Virtual address storage extension     */                     
+                                    195+*/*     OS/VS - OS/VS extention is pointed to by CVTEXT1             */                     
+                                    196+*/*     OS/VS1 - OS/VS2 extention is pointed to by CVTEXT2           */                     
+                                    197+*/*                                                                  */                     
+                                    198+*/*01* SERIALIZATION:                                                */                     
+                                    199+*/*     Based on the individual fields being referenced.             */                     
+                                    200+*/*                                                                  */                     
+                                    201+*/*01* FUNCTION:                                                     */                     
+                                    202+*/*02*  The CVT provides the means by which non-nucleus-resident     */                     
+                                    203+*/*     routines may refer to information in the nucleus of the      */                     
+                                    204+*/*     control program.  It contains addresses of other control     */                     
+                                    205+*/*     blocks and tables used by the control program routines.      */                     
+                                    206+*/*                                                                  */                     
+                                    207+*/*01* METHOD OF ACCESS:                                             */                     
+                                    208+*/*                                                                  */                     
+                                    209+*/*02*  ASM:                                                         */                     
+                                    210+*/*      DSECT=YES should be specified on macro call except          */                     
+                                    211+*/*      when called by IEAVCVT to create CSECT.                     */                     
+                                    212+*/*                                                                  */                     
+                                    213+*/*      CVT for OS/VS2 is always mapped.                            */                     
+                                    214+*/*                                                                  */                     
+                                    215+*/*      The PREFIX is not mapped unless PREFIX=YES is specified.    */                     
+                                    216+*/*                                                                  */                     
+                                    217+*/*      A USING on CVTMAP or DSECT name will establish              */                     
+                                    218+*/*      addressability for all symbols except in the 2 extentions.  */                     
+                                    219+*/*                                                                  */                     
+                                    220+*/*      To establish addressability for the                         */                     
+                                    221+*/*      OS - OS/VS common extension, you should code:               */                     i                                    222+*/*                                                                  */                     
+                                                                                                               Page    8            
+  Active Usings: DEMO1,R12                                                                                                          
+  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2026/10/19 11.13            
+                                    223+*/*          L     REG,CVTEXT1                                       */                     
+                                    224+*/*          USING CVTXTNT1,REG                                      */                     
+                                    225+*/*                                                                  */                     
+                                    226+*/*      To establish addressability for the OS/VS2                  */                     
+                                    227+*/*      common extension, you should code:                          */                     
+                                    228+*/*                                                                  */                     
+                                    229+*/*          L     REG,CVTEXT2                                       */                     
+                                    230+*/*          USING CVTXTNT2,REG                                      */                     
+                                    231+*/*                                                                  */                     
+                                    232+*/*      Where REG in either case is any register other than zero.   */                     
+                                    233+*/*                                                                  */                     
+                                    234+*/*      When LISTING is suppressed, you can determine which         */                     
+                                    235+*/*      DSECT a symbol is in by using the statement number          */                     
+                                    236+*/*      in the DEFN column in the Cross Reference Listing.          */                     
+                                    237+*/*      For example, any symbol defined between the                 */                     
+                                    238+*/*      statement numbers for CVTXTNT1 and CVTXTNT2 is in           */                     
+                                    239+*/*      the OS - OS/VS common extension.                            */                     
+                                    240+*/*                                                                  */                     
+                                    241+*/*      Specify LIST=YES on macro call to obtain a listing.         */                     
+                                    242+*/*                                                                  */                     
+                                    243+*/*02*  PL/AS:                                                       */                     
+                                    244+*/*                                                                  */                     
+                                    245+*/*      DCL CVTPTR PTR.                                             */                     
+                                    246+*/*                                                                  */                     
+                                    247+*/*      Specify %IHALIST='YES' before %INCLUDE to obtain            */                     
+                                    248+*/*      the PL/AS listing.                                          */                     
+                                    249+*/*                                                                  */                     
+                                    250+*/*      For integration, a listing must not be requested unless     */                     
+                                    251+*/*      your module creates the CSECT.                              */                     
+                                    252+*/*                                                                  */                     
+                                    253+*/*01* DISTRIBUTION LIBRARY:  AMACLIB                                */                     
+                                    254+*/*                                                                  */                     
+                                    255+*/*01* CHANGE ACTIVITY:                                              */                     
+                                    256+*/*  $LS=PR313    JBB3313  891128  PD16EI:  SHOWHDR format complete  */                     
+                                    257+*/*                                                                  */                     
+                                    258+*/* END OF SPECIFICATIONS ********************************************/                     
+                                    259+*                                                                                           
+                                    260+*%GOTO CVTL2;   /*                                                                          
+                                    261+         PUSH  PRINT                                                    01-CVT              
+                                    262+         PRINT OFF                                                      01-CVT              
+                                   1652+         POP   PRINT                                                    01-CVT              
+                                   1653           END                                                                               
+                                                                                                                                    
+                               Ordinary Symbol and Literal Cross Reference                                     Page    9            
+Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2026/10/19 11.13            
+AHLHEAD       1 00000000 00000000 A   T                  548  548                                                                   
+AHLVCCR8      1 00000000 00000000 A   T                 1115 1115                                                                   
+ASMVT         1 00000000 00000000 A   T                 1000 1000                                                                   
+CBBRANCH      1 00000000 00000000 A   T                 1160 1160                                                                   
+CRBRANCH      1 00000000 00000000 A   T                  896  896                                                                   
+CSRTABLE      1 00000000 00000000 A   T                  916  916                                                                   
+CSVARMGR      1 00000000 00000000 A   T                  965  965                                                                   
+CSVEXIT       1 00000000 00000000 A   T                  834  834                                                                   
+CSVLLCB       1 00000000 00000000 A   T                  359  359                                                                   
+CSVLLTRM      1 00000000 00000000 A   T                  360  360                                                                   
+CSVMEM        1 00000000 00000000 A   T                  605  605                                                                   
+CSVVFGET      1 00000000 00000000 A   T                 1233 1233                                                                   
+CSVVFIND      1 00000000 00000000 A   T                 1231 1231                                                                   
+CVTBRET       2 00000152 FFFFFFFF     H  H               387  976  1055                                                             
+CVTFIX        1 00000000 FFFFFFFF     J                  267   14U                                                                  
+CVTPRODI      8 000000E0 FFFFFFFF     C  C               314   16                                                                   
+CVTPRODN      8 000000D8 FFFFFFFF     C  C               270   15                                                                   
+CVTPTR        1 00000010 00000001 A   U                  263   12                                                                   
+CVTSNAME      8 00000254 FFFFFFFF     C  C               656   17                                                                   
+CVTVSTGX      1 00000000 FFFFFFFE     J                 1519 1295                                                                   
+CVTXTNT1      1 00000000 FFFFFFFD     J                 1559  574                                                                   
+CVTXTNT2      1 00000000 FFFFFFFC     J                 1567  645                                                                   
+CVT4MS1       1 00000010 FFFFFFFF A   U                  415  423                                                                   
+CVT6DAT       1 00000002 FFFFFFFF A   U                  419  423                                                                   
+DEMO1         1 00000000 00000001     J                    1    2     3U                                                            
+DFAIDTAB      1 00000000 00000000 A   T                 1308 1308                                                                   
+FMBRANCH      1 00000000 00000000 A   T                 1082 1082                                                                   
+FMIDOFF       1 0000001A 00000001 A   U                   41   16M                                                                  
+GLBRANCH      1 00000000 00000000 A   T                  987  987                                                                   
+GMBRANCH      1 00000000 00000000 A   T                 1084 1084                                                                   
+GVT           1 00000000 00000000 A   T                  849  849                                                                   
+IARMPVT       1 00000000 00000000 A   T                  663  663                                                                   
+IARMRRCE      1 00000000 00000000 A   T                 1272 1272                                                                   
+IARPIBR       1 00000000 00000000 A   T                 1242 1242                                                                   
+IARPSIV       1 00000000 00000000 A   T                 1063 1063                                                                   
+IARPSXM       1 00000000 00000000 A   T                 1216 1216                                                                   
+IARXKEY       1 00000000 00000000 A   T                 1174 1174                                                                   
+IARXVIO       1 00000000 00000000 A   T                 1064 1064                                                                   
+ICYMMVTC      1 00000000 00000000 A   T                 1606 1606                                                                   
+IDA121CV      1 00000000 00000000 A   T                 1002 1002                                                                   
+IEABEND       1 00000000 00000000 A   T                  514  514                                                                   
+IEADQIQE      1 00000000 00000000 A   T                  982  982                                                                   
+IEAECVT       1 00000000 00000000 A   T                  438  438                                                                   
+IEAGSMQ       1 00000000 00000000 A   T                  959  959                                                                   
+IEAIHASU      1 00000000 00000000 A   T                 1203 1203                                                                   
+IEALSMQ       1 00000000 00000000 A   T                  961  961                                                                   
+IEAMASCB      1 00000000 00000000 A   T                  928  928   932                                                             
+IEAPATCH      1 00000000 00000000 A   T                  522  522                                                                   
+IEAPDSRT      1 00000000 00000000 A   T                  857  857                                                                   
+IEAPTRV       1 00000000 00000000 A   T                  612  612                                                                   
+IEAQCDSR      1 00000000 00000000 A   T                  505  505                                                                   
+IEAQCS01      1 00000000 00000000 A   T                  969  969                                                                   
+IEAQLPAQ      1 00000000 00000000 A   T                  506  506                                                                   
+IEAQTD00      1 00000000 00000000 A   T                  401  401                                                                   
+IEAQTE00      1 00000000 00000000 A   T                  399  399                                                                   
+                                                                                                                                    
+                               Ordinary Symbol and Literal Cross Reference                                     Page   10            
+Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2026/10/19 11.13            
+IEARPOST      1 00000000 00000000 A   T                  984  984                                                                   
+IEASMFEX      1 00000000 00000000 A   T                  861  861                                                                   
+IEASMFSP      1 00000000 00000000 A   T                 1211 1211                                                                   
+IEASPOST      1 00000000 00000000 A   T                 1004 1004                                                                   
+IEASVDCB      1 00000000 00000000 A   T                  389  389                                                                   
+IEATCBP       1 00000000 00000000 A   T                  336  336                                                                   
+IEATPC        1 00000000 00000000 A   T                  391  391                                                                   
+IEATRSCN      1 00000000 00000000 A   T                  821  821                                                                   
+IEAVAR02      1 00000000 00000000 A   T                  908  908                                                                   
+IEAVBLDP      1 00000000 00000000 A   T                  892  892                                                                   
+IEAVDELP      1 00000000 00000000 A   T                  895  895                                                                   
+IEAVEAC0      1 00000000 00000000 A   T                  986  986                                                                   
+IEAVEADV      1 00000000 00000000 A   T                 1148 1148                                                                   
+IEAVEDR1      1 00000000 00000000 A   T                 1029 1029                                                                   
+IEAVELRM      1 00000000 00000000 A   T                  978  978                                                                   
+IEAVENLU      1 00000000 00000000 A   T                 1328 1328                                                                   
+IEAVENQ2      1 00000000 00000000 A   T                  975  975                                                                   
+IEAVEQV1      1 00000000 00000000 A   T                 1136 1136                                                                   
+IEAVEQV2      1 00000000 00000000 A   T                 1139 1139                                                                   
+IEAVEQV3      1 00000000 00000000 A   T                 1142 1142                                                                   
+IEAVERI1      1 00000000 00000000 A   T                 1031 1031                                                                   
+IEAVERP1      1 00000000 00000000 A   T                 1033 1033                                                                   
+IEAVESC1      1 00000000 00000000 A   T                 1164 1164                                                                   
+IEAVESPR      1 00000000 00000000 A   T                 1093 1093                                                                   
+IEAVESTU      1 00000000 00000000 A   T                 1326 1326                                                                   
+IEAVESVT      1 00000000 00000000 A   T                 1099 1099                                                                   
+IEAVET6E      1 00000000 00000000 A   T                 1199 1199                                                                   
+IEAVEVT2      1 00000000 00000000 A   T                 1153 1153                                                                   
+IEAVEXPR      1 00000000 00000000 A   T                  957  957                                                                   
+IEAVEXP1      1 00000000 00000000 A   T                 1130 1130                                                                   
+IEAVFRCL      1 00000000 00000000 A   T                  894  894                                                                   
+IEAVGSDA      1 00000000 00000000 A   T                 1144 1144                                                                   
+IEAVGTCL      1 00000000 00000000 A   T                  893  893                                                                   
+IEAVGWSA      1 00000000 00000000 A   T                  989  989                                                                   
+IEAVLKRM      1 00000000 00000000 A   T                  636  636                                                                   
+IEAVMFRM      1 00000000 00000000 A   T                 1074 1074                                                                   
+IEAVMSGS      1 00000000 00000000 A   T                  582  582                                                                   
+IEAVNVT0      1 00000000 00000000 A   T                 1311 1311                                                                   
+IEAVRSUH      1 00000000 00000000 A   T                 1191 1191                                                                   
+IEAVRT03      1 00000000 00000000 A   T                  791  791                                                                   
+IEAVSPND      1 00000000 00000000 A   T                 1201 1201                                                                   
+IEAVSTAG      1 00000000 00000000 A   T                  936  936                                                                   
+IEAVTCTL      1 00000000 00000000 A   T                 1193 1193                                                                   
+IEAVTEST      1 00000000 00000000 A   T                  640  640                                                                   
+IEAVTRGR      1 00000000 00000000 A   T                  997  997                                                                   
+IEAVTRG1      1 00000000 00000000 A   T                  367  367                                                                   
+IEAVTRV3      1 00000000 00000000 A   T                  633  633                                                                   
+IEAVTSBP      1 00000000 00000000 A   T                  942  942                                                                   
+IEAVTSFR      1 00000000 00000000 A   T                  603  603                                                                   
+IEAVTSFV      1 00000000 00000000 A   T                 1204 1204                                                                   
+IEAVTSGL      1 00000000 00000000 A   T                  940  940                                                                   
+IEAVVMSR      1 00000000 00000000 A   T                  661  661                                                                   
+IEAVWAIT      1 00000000 00000000 A   T                  964  964                                                                   
+IEAVWSAC      1 00000000 00000000 A   T                  995  995                                                                   
+IEAVWSAG      1 00000000 00000000 A   T                  993  993                                                                   
+                                                                                                                                    
+                               Ordinary Symbol and Literal Cross Reference                                     Page   11            
+Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2026/10/19 11.13            
+IEAVWSAL      1 00000000 00000000 A   T                  991  991                                                                   
+IEAVXEXT      1 00000000 00000000 A   T                 1072 1072                                                                   
+IEAVXSFT      1 00000000 00000000 A   T                 1039 1039                                                                   
+IEAVXSTN      1 00000000 00000000 A   T                 1045 1045                                                                   
+IEAVXSTS      1 00000000 00000000 A   T                 1043 1043                                                                   
+IEAVXUNN      1 00000000 00000000 A   T                 1068 1068                                                                   
+IEAVXUNS      1 00000000 00000000 A   T                 1047 1047                                                                   
+IEAWTCB       1 00000000 00000000 A   T                 1108 1108                                                                   
+IEA0DS        1 00000000 00000000 A   T                  437  437                                                                   
+IEA0EF00      1 00000000 00000000 A   T                  337  337                                                                   
+IEA0EF01      1 00000000 00000000 A   T                  377  377                                                                   
+IEA0PT0E      1 00000000 00000000 A   T                 1180 1180                                                                   
+IEA0PT01      1 00000000 00000000 A   T                  444  444                                                                   
+IEA0PT02      1 00000000 00000000 A   T                 1105 1105                                                                   
+IEA0PT03      1 00000000 00000000 A   T                 1182 1182                                                                   
+IEA0VL00      1 00000000 00000000 A   T                  348  348                                                                   
+IEA0VL01      1 00000000 00000000 A   T                  830  830                                                                   
+IECIXAVL      1 00000000 00000000 A   T                  429  429                                                                   
+IECPCNVT      1 00000000 00000000 A   T                  351  351                                                                   
+IECPRLTV      1 00000000 00000000 A   T                  355  355                                                                   
+IECVEXCL      1 00000000 00000000 A   T                 1066 1066                                                                   
+IECXAPG       1 00000000 00000000 A   T                  346  346                                                                   
+IECXITP       1 00000000 00000000 A   T                  376  376                                                                   
+IECXTLER      1 00000000 00000000 A   T                  362  362                                                                   
+IEC0SCR1      1 00000000 00000000 A   T                  528  528                                                                   
+IEECUCB       1 00000000 00000000 A   T                  398  398                                                                   
+IEEMSER       1 00000000 00000000 A   T                  370  370   442                                                             
+IEEVEXSN      1 00000000 00000000 A   T                  794  794                                                                   
+IEEVSTOP      1 00000000 00000000 A   T                 1118 1118                                                                   
+IEFAQTOP      1 00000000 00000000 A   T                  920  920                                                                   
+IEFAUSDM      1 00000000 00000000 A   T                  342  342                                                                   
+IEFENFDM      1 00000000 00000000 A   T                  508  508                                                                   
+IEFJESCT      1 00000000 00000000 A   T                  619  619                                                                   
+IEFLINK       1 00000000 00000000 A   T                  339  339                                                                   
+IEFQMWR       1 00000000 00000000 A   T                  458  458                                                                   
+IEWFBOSV      1 00000000 00000000 A   T                  435  435                                                                   
+IEWMSEPT      1 00000000 00000000 A   T                 1013 1013                                                                   
+IFBDCB        1 00000000 00000000 A   T                  424  424                                                                   
+IFDOLT0A      1 00000000 00000000 A   T                  859  859                                                                   
+IFGDEBVR      1 00000000 00000000 A   T                 1601 1601                                                                   
+IGC043BR      1 00000000 00000000 A   T                  904  904                                                                   
+IGC044R2      1 00000000 00000000 A   T                 1015 1015                                                                   
+IGC062R1      1 00000000 00000000 A   T                  985  985                                                                   
+IGC07903      1 00000000 00000000 A   T                 1134 1134                                                                   
+IGC124        1 00000000 00000000 A   T                 1150 1150                                                                   
+IGFRVT        1 00000000 00000000 A   T                  523  523                                                                   
+IGVCPBDB      1 00000000 00000000 A   T                 1264 1264                                                                   
+IGVCPDLB      1 00000000 00000000 A   T                 1266 1266                                                                   
+IGVCPFRE      1 00000000 00000000 A   T                 1256 1256                                                                   
+IGVCPGTC      1 00000000 00000000 A   T                 1254 1254                                                                   
+IGVCPGUB      1 00000000 00000000 A   T                 1248 1248                                                                   
+IGVCPGUP      1 00000000 00000000 A   T                 1251 1251                                                                   
+IGVCPGUS      1 00000000 00000000 A   T                 1274 1274                                                                   
+IGVGCAS       1 00000000 00000000 A   T                  898  898                                                                   
+IGVGFAS       1 00000000 00000000 A   T                  902  902                                                                   
+                                                                                                                                    
+                               Ordinary Symbol and Literal Cross Reference                                     Page   12            
+Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2026/10/19 11.13            
+IGVGRRGN      1 00000000 00000000 A   T                 1278 1278                                                                   
+IGVGVRGN      1 00000000 00000000 A   T                 1280 1280                                                                   
+IGVQSPET      1 00000000 00000000 A   T                  900  900                                                                   
+IGVSLIST      1 00000000 00000000 A   T                 1258 1258                                                                   
+IGVSLOC       1 00000000 00000000 A   T                 1262 1262                                                                   
+IGVSREGN      1 00000000 00000000 A   T                 1260 1260                                                                   
+IGVSTSKI      1 00000000 00000000 A   T                 1245 1245                                                                   
+ILRJTERM      1 00000000 00000000 A   T                 1188 1188                                                                   
+Int1          2 00000040 00000001     H  H                30    4     5                                                             
+IOSVDEVN      1 00000000 00000000 A   T                 1205 1205                                                                   
+IOSVHID       1 00000000 00000000 A   T                 1215 1215                                                                   
+IOSVSUCB      1 00000000 00000000 A   T                 1218 1218                                                                   
+IRARMCNS      1 00000000 00000000 A   T                  955  955                                                                   
+IRARMEPS      1 00000000 00000000 A   T                 1177 1177                                                                   
+IRARMI00      1 00000000 00000000 A   T                  911  911                                                                   
+ISNBRNCH      1 00000000 00000000 A   T                 1070 1070                                                                   
+PRODOFF       1 0000000C 00000001 A   U                   40   15M                                                                  
+RMBRANCH      1 00000000 00000000 A   T                 1081 1081                                                                   
+SYSOFF        1 0000002B 00000001 A   U                   42   17M                                                                  
+WTOL          4 00000044 00000001     F  F                36   15M   16M   17M   22                                                 
+                                                                                                                                    
+                                          Macro and Copy Code Source Summary                                   Page   13            
+ Con Source                                        Volume    Members                        HLASM R6.0  2026/10/19 11.13            
+  L1 SYS1.MACLIB                                   5DSY02    CVT      IHBINNRR SYSSTATE WTO                                         
+                                                                                                                                    
+                                                Dsect Cross Reference                                          Page   14            
+Dsect     Length      Id       Defn                                                         HLASM R6.0  2026/10/19 11.13            
+CVTFIX   00000600  FFFFFFFF     267                                                                                                 
+CVTVSTGX 00000050  FFFFFFFE    1519                                                                                                 
+CVTXTNT1 0000000C  FFFFFFFD    1559                                                                                                 
+CVTXTNT2 00000084  FFFFFFFC    1567                                                                                                 
+                                                                                                                                    
+                                                      Using Map                                                Page   15            
+                                                                                            HLASM R6.0  2026/10/19 11.13            
+  Stmt  -----Location----- Action ----------------Using----------------- Reg Max     Last Label and Using Text                      
+          Count      Id           Type          Value    Range     Id        Disp    Stmt                                           
+     3  00000006  00000001 USING  ORDINARY    00000000 00001000 00000001  12 0006F     22 DEMO1,12                                  
+    14  00000020  00000001 USING  ORDINARY    00000000 00001000 FFFFFFFF   7 00254     17 CVTFIX,7                                  
+    24  00000038  00000001 DROP                                            7              7                                         
+                                                                                                                                    
+                                   General Purpose Register Cross Reference                                    Page   16            
+ Register  References (M=modified, B=branch, U=USING, D=DROP, N=index)                      HLASM R6.0  2026/10/19 11.13            
+    0(0)      28                                                                                                                    
+    1(1)      22M                                                                                                                   
+    2(2)    (no references identified)                                                                                              
+    3(3)       4M                                                                                                                   
+    4(4)       5M    6     7                                                                                                        
+    5(5)       6M                                                                                                                   
+    6(6)       7M                                                                                                                   
+    7(7)      12M   13M   14U   24D                                                                                                 
+    8(8)      11M   25                                                                                                              
+    9(9)    (no references identified)                                                                                              
+   10(A)    (no references identified)                                                                                              
+   11(B)     819B  820B                                                                                                             
+   12(C)       2M    3U                                                                                                             
+   13(D)    (no references identified)                                                                                              
+   14(E)      11    25M   29B                                                                                                       
+   15(F)      28M 1288M 1288                                                                                                        
+                                                                                                                                    
+                                  Diagnostic Cross Reference and Assembler Summary                             Page   17            
+                                                                                            HLASM R6.0  2026/10/19 11.13            
+     No Statements Flagged in this Assembly                                                                                         
+HIGH LEVEL ASSEMBLER, 5696-234, RELEASE 6.0, PTF UO03644                                                                            
+SYSTEM: z/OS 03.01.00              JOBNAME: APP1        STEPNAME: STEP1      PROCSTEP: (NOPROC)                                     
+Unicode Module:   ASMA047C   From Page     1148   To Page    17584           ECECP: International 1                                 
+Data Sets Allocated for this Assembly                                                                                               
+ Con DDname   Data Set Name                                Volume  Member                                                           
+  P1 SYSIN    /u/ahz/tmp/APP1.asm                                                                                                   
+  L1 SYSLIB   SYS1.MACLIB                                  5DSY02                                                                   
+     SYSLIN   /u/ahz/tmp/APP1.obj                                                                                                   
+     SYSPRINT /u/ahz/tmp/APP1.log                                                                                                   
+                                                                                                                                    
+  59388K allocated to Buffer Pool       Storage required    1008K                                                                   
+     36 Primary Input Records Read         6307 Library Records Read                  0 Work File Reads                             
+      0 ASMAOPT Records Read                603 Primary Print Records Written         0 Work File Writes                            
+      5 Object Records Written                0 ADATA Records Written                                                               
+Assembly Start Time: 11.13.54 Stop Time: 11.13.54 Processor Time: 00.00.00.0038                                                     
+Return Code 000                                                                                                                     
+

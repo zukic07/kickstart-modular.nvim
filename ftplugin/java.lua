@@ -2,8 +2,8 @@
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
 local workspace_dir = '/home/ahz/nvim-workspaces-root/' .. project_name
---                                               ^^
---                                               string concattenation in Lua
+--                                                      ^^
+--                                                      string concattenation in Lua
 local bundles = {
   -- Path to java-debug-adapter jar file
   vim.fn.glob('/home/ahz/.local/share/nvim/mason/packages/java-debug-adapter/extension/server/*.jar', true),
@@ -36,11 +36,11 @@ local config = {
         runtimes = {
           {
             name = 'JavaSE-17',
-            path = '/home/ahz/installs/java-jdk/jdk-17.0.18.1/', -- Pfad zu Java 17
+            path = '/home/ahz/.sdkman/candidates/java/17.0.18.1-sem/', -- Pfad zu Java 17
           },
           {
             name = 'JavaSE-21',
-            path = '/home/ahz/installs/java-jdk/jdk-21.0.9+10/',
+            path = '/home/ahz/.sdkman/candidates/java/21.0.10-sem/',
             default = true, -- Projekt verwendet Java 21
           },
         },
